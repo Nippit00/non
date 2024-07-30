@@ -1,6 +1,12 @@
 # Use the official Node.js image from the Docker Hub
 FROM node:18-alpine
 
+# Define the command to run the application
+CMD ["npm", "start"]
+
+# Use the official Node.js image from the Docker Hub
+FROM node:18-alpine
+
 # Create and set the working directory
 WORKDIR /app
 
