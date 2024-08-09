@@ -1,213 +1,195 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <title>Dashboard</title>
-  <link rel="icon" type="image/x-icon" href="../tracktag/img/favi.png">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap"></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
+  <%- include('../include/head.ejs') %>
+	<meta charset="UTF-8">	
+  <title>
+    <%= pageTitle %>
+  </title>
+  <script>
+    window.onload = function() {
+      document.getElementById('spinner-container').style.display = 'none';
+    };
 
-  .font-th-sarabun {
+    window.addEventListener('DOMContentLoaded', (event) => {
+      document.getElementById('spinner-container').style.display = 'flex';
+    });
+
+    function toggleCollapse(elementId) {
+      const element = document.getElementById(elementId);
+      element.classList.toggle('hidden');
+    }
+
+    const dateCheckForm = <%- JSON.stringify(dateForm) %>;
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
+
+    .font-th-sarabun {
       font-family: 'Sarabun', sans-serif;
-  }
+    }
   </style>
 </head>
 
-<body class="font-th-sarabun">
+<body class="bg-gray-100 font-th-sarabun">
+  <div>
+    <% function countEcoSolutions(data) {
+      let count1=0;
+      followdata.forEach((item) => {
+        if (item.smartKey === data) {
+          count1++;
+        }
+      });
+      return count1;
+    }
+    function countComplete(data) {
+      let count2 = 0;
+      followdata.forEach((item) => {
+        if (item.smartKey === data) {
+          if(item.status === 2||item.status===3){
+            count2++;
+          }
+        }
+      });
+      return count2;
+    }
+    %>
+    <%
+      const currentDate = new Date();
+      const openForm = new Date(dateForm.openForm);
+      const closeForm = new Date(dateForm.closeForm);
+    %>
 
-  <div id="spinner-container" class="flex fixed inset-0 bg-white bg-opacity-90 z-50 flex-col justify-center items-center">
-    <img id="static-image" src="/img/favi.png" alt="Loading..." class="w-24 h-auto mb-5">
-    <div id="spinner" class="flex gap-2">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
+    <div id="spinner-container" class="flex fixed top-0 left-0 w-full h-full bg-white bg-opacity-90 z-50 overflow-hidden flex-col justify-center items-center">
+      <img id="static-image" src="/img/favi.png" alt="Loading..." class="w-48 h-auto mb-5">
+      <div id="spinner" class="flex gap-2">
+        <div class="dot w-4 h-4 bg-blue-500 rounded-full animate-blink animation-delay-1"></div>
+        <div class="dot w-4 h-4 bg-blue-500 rounded-full animate-blink animation-delay-2"></div>
+        <div class="dot w-4 h-4 bg-blue-500 rounded-full animate-blink animation-delay-3"></div>
+      </div>
+    </div>
+  </div>
+  <%- include('../component/navbar.ejs') %>
+
+  <div class="flex flex-col min-h-screen">
+    
+    
+    <div class="w-full">
+      <img src="/img/banner.png" alt="Banner Image" class="w-full">
+    </div>
+
+    <div class="text-center mt-3">
+      <h1 class="text-4xl">
+        รายการความคืบหน้ารายโครงการ<span class="text-[#04b2a1]">เมืองที่ได้รับตราสัญลักษณ์</span>
+      </h1>
+    <div class="mt-5">
+      <%- include('../component/menu3.ejs') %>
+  <div>
+    <% if (followdata && followdata.length > 0) { %>
+      <h4 class="text-center text-teal-500 text-2xl"><%= followdata[0].cityName %></h4>
+    <% } else { %>
+      <h4 class="text-center text-teal-500 text-2xl">No City Data Available</h4>
+    <% } %>
+  </div>
+      <div class="w-11/12 lg:w-4/5 mx-auto shadow-lg rounded-2xl bg-yellow-400 mt-3">
+        <p class="text-center pt-5"><span class="text-white font-bold">***โปรดอ่าน:</span>
+          <span class="text-white">สถานะ <span class="inline-block w-4 h-4 bg-red-500 rounded-full border border-red-500"></span> หมายถึง ยังไม่ทำการกรอกฟอร์ม -</span>
+          <span class="text-white">สถานะ <span class="inline-block w-4 h-4 bg-yellow-500 rounded-full border border-yellow-500"></span> หมายถึงฉบับร่าง -</span>
+          <span class="text-white">สถานะ <span class="inline-block w-4 h-4 bg-green-500 rounded-full border border-green-500"></span> หมายถึง ดำเนินการแล้ว -</span>
+          <span class="text-white">สถานะ <span class="inline-block w-4 h-4 bg-gray-200 rounded-full border-gray-500 border-2"></span> หมายถึง ยังไม่ถึงรอบเปิดกรอกฟอร์ม</span>
+        </p>
+
+        <div class="p-5 bg-gray-200 rounded-2xl mx-2 mb-5">
+          <div id="accordion">
+            <% function renderCard(section, displayName) { %>
+            <div class="mb-4">
+              <div class="bg-white rounded-lg shadow-md p-4 cursor-pointer flex justify-between items-center" onclick="toggleCollapse('collapse<%= section %>')" id="heading<%= section %>">
+                <h5 class="text-lg font-semibold">
+                  <%= displayName %>
+                </h5>
+                <% const countShow = countEcoSolutions(section) %>
+                <% const countSuccessShow = countComplete(section) %>
+                <span class="ml-auto text-md">รายงานเรียบร้อย <%= countSuccessShow %>/<%= countShow %> โครงการ</span>
+              </div>
+              <div id="collapse<%= section %>" class="hidden bg-white rounded-lg shadow-md mt-2">
+                <div class="p-4">
+                  <div class="grid grid-cols-1 sm:grid-cols-6 gap-4">
+                    <div class="p-2 bg-gray-100 rounded-md col-span-4">
+                      <% const countProject = countEcoSolutions(section) %>
+                      <%= countProject %> โครงการ
+                    </div>
+                    <div class="p-2 col-span-1  bg-gray-100 rounded-md text-center">
+                      รอบที่  <%= dataRound.round %>
+                    </div>
+                    <div class="p-2 col-span-1 bg-gray-100 rounded-md text-center">
+                      <% const count = countEcoSolutions(section) %>
+                      <% const countSuccess = countComplete(section) %>
+                      <%= countSuccess %>/<%= count %>
+                    </div>
+                  </div>
+                  <div class="">
+                    <% followdata.forEach((item) => { %>
+                    <% if(item.smartKey === section && item.status >= 0) { %>
+                    <div class="p-4 bg-white border rounded-md shadow-sm grid grid-cols-1 sm:grid-cols-6 gap-4 mt-4" >
+                      <span class="mb-2 col-span-4 items-center "><%= item.solutionID.slice(4) %> <%= item.solutionName %></span>
+                      <% if (item.status == 2 || currentDate > closeForm || currentDate < openForm||item.status == 3) { %>
+                      <p class="p-2 w-full col-span-1 bg-gray-300 text-white rounded text-center h-10 hidden lg:block"  >กรอกฟอร์ม</p>
+                      <% } else { %>
+                            <% if (item.solutionID.includes("CDP01")) { %>
+                              <a class="p-2 w-full col-span-1 bg-teal-500 text-white rounded text-center h-10 hidden lg:block" href="/formcdp1/<%= item.solutionID %>/<%= dataRound.round %>">à¸à¸£à¸¬à¸à¸Ÿà¸¬à¸£à¹Œà¸¡</a>
+                            <% } else { %>
+                              <a class="p-2 w-full col-span-1 bg-teal-500 text-white rounded text-center h-10 hidden lg:block" href="/formsmart/<%= item.solutionID %>/<%= dataRound.round %>">à¸à¸£à¸¬à¸à¸Ÿà¸¬à¸£à¹Œà¸¡</a>
+                            <% } %>                        
+                        <% } %>
+                        <span class="mt-2 col-span-1 text-start items-center ml-5">
+                          <% if (currentDate >= openForm) { %>
+                          <% if (item.status == 0) { %>
+                          <span class="w-5 h-5 rounded-full bg-red-500 inline-block"></span>
+                          <span class="text-red-500 ">ยังไม่ทำการกรอกฟอร์ม</span>
+                          <% } else if (item.status == 1) { %>
+                          <span class="w-5 h-5 rounded-full bg-yellow-500 inline-block"></span>
+                          <span class="text-yellow-500 ">ฉบับร่าง</span>
+                          <% } else if (item.status == 2||item.status == 3) { %>
+                          <span class="w-5 h-5 rounded-full bg-green-500 inline-block"></span>
+                          <span class="text-green-500 ">ดำเนินการแล้ว</span>
+                          <% } %>
+                          <% } else { %>
+                          <span class="w-5 h-5 bg-gray-200 rounded-full border-gray-500 border-2 inline-block"></span>
+                          <span class="text-grey-700">ยังไม่ถึงรอบเปิดกรอกฟอร์ม</span>
+                          <% } %>
+
+                        </span>
+
+
+                    </div>
+                    <% } %>
+                    <% }) %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% } %>
+            <%- renderCard('PIF', 'โครงสร้างพื้นฐานด้านกายภาพ') %>
+            <%- renderCard('DIF', 'โครงสร้างพื้นฐานด้านดิจิทัล') %>
+            <%- renderCard('CDP', 'City Data Platform: CDP') %>
+            <%- renderCard('ENV', 'Smart Environment') %>
+            <%- renderCard('ENE', 'Smart Energy') %>
+            <%- renderCard('GOV', 'Smart Governance') %>
+            <%- renderCard('ECO', 'Smart Economy') %>
+            <%- renderCard('LIV', 'Smart Living') %>
+            <%- renderCard('MOB', 'Smart Mobility') %>
+            <%- renderCard('PEO', 'Smart People') %>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-auto">
+      <%- include('../component/footer.ejs') %>
     </div>
   </div>
 
-  <%- include('../component/navbar.ejs') %>
-
-  <div class="w-full">
-    <img src="/img/banner.png" alt="Banner Image" class="w-full">
-  </div>
-
-  <div class="text-center py-5">
-    <h1 class="text-4xl">
-      ผลรายงานความคืบหน้า<span class="text-[#04b2a1]">เมืองที่ได้รับตราสัญลักษณ์</span>
-    </h1>
-  </div>
-
-  <%- include('../component/menu2.ejs') %>
-
-  
-  <div class="mt-5 border-2 border-inherit rounded-3xl w-dvh  md:w-3/5 mx-auto ">
-    <div class="border-b-2">
-      <div class="flex justify-between items-center bg-gradient-to-r from-gray-100 to-white rounded-t-3xl h-16">
-        <div class="text-xl mx-5"><%= data[0].cityName %></div>
-        <div ><img src="/img/navpic.png" alt="logo" class="w-72"></div>
-      </div>
-      <div class="flex justify-between h-16 items-center">
-        <div class="text-xl mx-5">วิสัยทัศน์:ยังไม่มี</div>
-        <div class="text-xl mx-5"> ประเภท: <%= new Date() - new Date(data.date) < 6 * 30 * 24 * 60 * 60 * 1000 ? 'เมืองใหม่' : 'เมืองเก่า' %></div>
-      </div>
-    </div>  
-        <!-- กราฟ  -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- บริการเมืองอัจฉริยะ -->
-          <% const initialRound=JSON.parse(rounded)[Object.keys(JSON.parse(rounded)).length]; %>
-          <div class="card col-span-1 lg:ml-3">
-              <h3 class="section-title">บริการเมืองอัจฉริยะ : <span style="color: #2c7f97;">
-                  <%= Object.keys(initialRound.smartkeycount).length-1 %>
-              </span>
-              Smarts <br />จำนวนโครงการ : <span style="color: #d0a519;">
-                  <%= initialRound.count-4 %>
-              </span> โครงการ</h3>
-              <div class="grid grid-cols-3 gap-2">
-                  <!-- Icon blocks looped through initialRound.smartkeycount -->
-                  <% Object.entries(initialRound.smartkeycount).forEach(([key, count]) => { if(key==="PIF"||key==="DIF"){}
-                  else{%>
-
-
-
-const stackedBarCtx = document.getElementById('stackedBarChart').getContext('2d');
-const stackedBarChart = new Chart(stackedBarCtx, {
-  type: 'bar',
-  data: {
-    labels: Object.keys(initialRound.smartkeycount),
-    datasets: [{
-      label: 'โครงการที่สำเร็จแล้ว ',
-      data: Object.values(initialRound.success),
-      backgroundColor: '#37B7C3'
-    },
-    {
-      label: 'โครงการที่ยังไม่สำเร็จ',
-      data: Object.values(initialRound.unsuccess),
-      backgroundColor: '#cccccc'
-    }
-    ]
-  },
-  options: {
-    scales: {
-      x: {
-        stacked: true
-      },
-      y: {
-        stacked: true,
-        beginAtZero: true
-      }
-    },
-    plugins: {
-      legend: {
-        display: true,
-        position: 'bottom'
-      },
-      tooltip: {
-        callbacks: {
-          label: tooltipItem => `${tooltipItem.dataset.label}: ${tooltipItem.raw}`
-        }
-      },
-      datalabels: {
-        display: true,
-        color: '#000',
-        font: {
-          weight: 'bold',
-          family: "'Sarabun', sans-serif"
-        },
-        formatter: (value, context) => value === 0 ? null : value
-      }
-    }
-  },
-  plugins: [ChartDataLabels]
-});
-
-
-const avgProgressCtx = document.getElementById('avgprogress').getContext('2d');
-
-const entries = Object.entries(initialRound.averageProgressPerSmart);
-
-// จัดเรียงอาร์เรย์ตามค่า value
-const sortedEntries = entries.sort((a, b) => b[1] - a[1]);
-
-// แปลงอาร์เรย์ที่จัดเรียงแล้วกลับเป็นวัตถุ (ถ้าต้องการ)
-const sortedObject = Object.fromEntries(sortedEntries);
-
-const labels = Object.keys(sortedObject);
-const data = Object.values(sortedObject);
-const treemapData = labels.map((label, index) => (
-{
-v: data[index],
-label: label,
-
-}));
-
-function colorFromValue(value, border) {
-      var alpha = value / 100;
-      var color = "#36BA98";
-      if (border) {
-          alpha += 0.1;
-        }
-      return Chart.helpers.color(color)
-          .alpha(alpha)
-          .rgbString();
-  }
-
-
-const avgProgressChart = new Chart(avgProgressCtx, {
-type: 'treemap',
-data: {
-  datasets: [
-    {
-      label: "ความคืบหน้าโครงการตามแผน",
-      data: data,
-      backgroundColor: function (ctx) {
-                      return colorFromValue(ctx.dataset.data[ctx.dataIndex].v);
-                  },
-      borderColor: function (ctx) {
-                      return colorFromValue(ctx.dataset.data[ctx.dataIndex].v, true);
-                  },
-      borderWidth: 2,
-      spacing: 0.1,
-    },
-  ],
-},
-options: {
-  plugins: {
-    datalabels: {
-      formatter: (value, context) => labels[context.dataIndex],
-      color: '#000',
-      align: 'center',
-      anchor: 'center',
-      font: {
-        weight: 'bold',
-        size: 14,
-        family: "'Sarabun', sans-serif"
-      },
-    },
-    tooltip: {
-      callbacks: {
-        label: (context) => `ค่าเฉลี่ยความสำเร็จ: ${context.raw.v}%`,
-      },
-    },
-  },
-  maintainAspectRatio: false,
-  title: {
-    display: true,
-    text: 'Basic Treemap Sample',
-  },
-  legend: {
-    display: false,
-  },
-},
-plugins: [ChartDataLabels],
-});
-
-</script>
+</body>
 
 </html>
