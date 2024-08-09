@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db_depa:3306
--- Generation Time: Aug 06, 2024 at 10:33 AM
+-- Generation Time: Aug 06, 2024 at 08:44 AM
 -- Server version: 9.0.1
 -- PHP Version: 8.2.8
 
@@ -3691,18 +3691,10 @@ INSERT INTO `login_log` (`Login_ID`, `cityID`, `login_time`, `logout_time`) VALU
 (1669, '6201', '6/8/2567 15:13:02', NULL),
 (1670, '6201', '6/8/2567 15:13:26', NULL),
 (1671, '6201', '6/8/2567 15:19:35', '6/8/2567 15:21:04'),
-(1672, '6201', '6/8/2567 15:19:52', '6/8/2567 15:55:26'),
+(1672, '6201', '6/8/2567 15:19:52', NULL),
 (1673, '6201', '6/8/2567 15:21:19', '6/8/2567 15:41:06'),
 (1674, 'test', '6/8/2567 15:41:14', '6/8/2567 15:41:24'),
-(1675, '6201', '6/8/2567 15:42:50', NULL),
-(1676, '6201', '6/8/2567 15:55:56', NULL),
-(1677, '6201', '6/8/2567 16:04:20', NULL),
-(1678, '6201', '6/8/2567 16:35:13', NULL),
-(1679, '6201', '6/8/2567 16:41:09', NULL),
-(1680, '6201', '6/8/2567 16:43:43', NULL),
-(1681, '6201', '6/8/2567 17:12:10', NULL),
-(1682, '6201', '6/8/2567 17:14:30', NULL),
-(1683, '6201', '6/8/2567 17:28:28', NULL);
+(1675, '6201', '6/8/2567 15:42:50', NULL);
 
 -- --------------------------------------------------------
 
@@ -4729,7 +4721,7 @@ ALTER TABLE `anssolution`
 -- AUTO_INCREMENT for table `login_log`
 --
 ALTER TABLE `login_log`
-  MODIFY `Login_ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1684;
+  MODIFY `Login_ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1676;
 
 --
 -- AUTO_INCREMENT for table `question`
